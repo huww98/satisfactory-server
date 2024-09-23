@@ -1,0 +1,8 @@
+resources:
+- service.yaml
+- statefulset.yaml
+labels:
+  - pairs:
+      app: satisfactory-server
+    includeSelectors: true
+    includeTemplates: true

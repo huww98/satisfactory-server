@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: satisfactory-server
+spec:
+  serviceName: satisfactory
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - name: server
+        image: registry-vpc.cn-beijing.aliyuncs.com/huww98/satisfactory-server:latest
+        ports:
+        - containerPort: 7777
+          protocol: TCP
+        - containerPort: 7777
+          protocol: UDP
+        volumeMounts:
+        - name: save
+          mountPath: /server/FactoryGame/Saved
+        resources:
+          requests:
+            cpu: "1"
+            memory: 4Gi
+          limits:
+            cpu: "4"
+            memory: 12Gi
+      securityContext:
+        fsGroup: 999
+        fsGroupChangePolicy: "OnRootMismatch"
+  volumeClaimTemplates:
+  - metadata:
+      name: save
+    spec:
+      storageClassName: alibabacloud-disk
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 2Gi
